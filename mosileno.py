@@ -29,7 +29,8 @@ def root(request):
         link += '/' + request.GET.get('nextId')
     resp, content = h.request(link, headers=headers)
     items.extend(json.loads(content)['items'])
-    return {'items': items}
+    return {'items': items,
+            'username': 'toto'}
 
 @view_config(route_name='frame', renderer='frame.mako')
 def frame(request):
