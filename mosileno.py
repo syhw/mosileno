@@ -3,11 +3,16 @@ import logging
 from urllib import quote, unquote
 
 from pyramid.config import Configurator
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.security import unauthenticated_userid
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
-from pyramid.view import view_config
 from pyramid.response import Response
+from pyramid.view import view_config
 
 from mongokit import Connection
+
+from security import groupfinder
 from timer import Timer
 
 from paste.httpserver import serve
@@ -41,7 +46,7 @@ def root(request):
     ]
     return {
         'items': items,
-        'username': 'toto'
+        'username': unauthenticated_userid(request)
     }
 
 @view_config(route_name='frame', renderer='frame.mako')
@@ -83,18 +88,40 @@ if __name__ == '__main__':
     con = Connection('mongodb://hdparis114:f41922d68004e@hackday.mongohq.com:27017/hdparis114')
     con.register([Timer])
     settings['db'] = con.hdparis114
+
     # session factory
     session_factory = UnencryptedCookieSessionFactoryConfig('secret')
+
+    # authentication and authorization
+    cookie_secret = 'xohqu2aiPi4qui0aeM6uengieghee9ul'
+    authentication_policy = AuthTktAuthenticationPolicy(cookie_secret,
+        cookie_name='mosileno_auth', callback=groupfinder)
+    authorization_policy = ACLAuthorizationPolicy()
+
     # configuration setup
-    config = Configurator(settings=settings, session_factory=session_factory)
+    config = Configurator(settings=settings,
+                          session_factory=session_factory,
+                          authentication_policy=authentication_policy,
+                          authorization_policy=authorization_policy)
+
+    # routes and views
     config.add_static_view('static', 'static/')
     config.add_route('root', '/')
     config.add_route('frame', '/frame')
     config.add_route('timer_start', '/timer_start/{user}')
     config.add_route('timer_restart', '/timer_restart/{id}')
     config.add_route('timer_stop', '/timer_stop/{id}')
+    config.add_route('login', '/login')
+    config.add_view('auth.login',
+                    context='pyramid.httpexceptions.HTTPForbidden',
+                    renderer='login.mako')
+    config.add_view('auth.login',
+                    route_name='login',
+                    renderer='login.mako')
+    config.add_route('logout', '/logout')
+    config.add_view('auth.logout', route_name='logout')
     config.scan()
+
     # serve app
     app = config.make_wsgi_app()
     serve(app, host='0.0.0.0')
-

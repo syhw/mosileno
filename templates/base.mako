@@ -41,7 +41,11 @@ function vote(node) {
                         <tr>
                             <td style="width:18px;padding-right:4px"><a href="http://ycombinator.com"><img src="http://ycombinator.com/images/y18.gif" width=18 height=18 style="border:1px #ffffff solid;"></img></a></td>
                             <td style="line-height:12pt; height:10px;"><span class="pagetop"><b><a href="news">Hacker Noise</a></b><img src="http://ycombinator.com/images/s.gif" height=1 width=10><a href="newest">new</a> | <a href="threads?id=snippyhollow">threads</a> | <a href="newcomments">comments</a> | <a href="ask">ask</a> | <a href="jobs">jobs</a> | <a href="submit">submit</a></span></td>
-                            <td style="text-align:right;padding-right:4px;"><span class="pagetop"><a href="user?id=snippyhollow">${username}</a>&nbsp;(450)&nbsp;|&nbsp;<a href="/r?fnid=4884svt0Wx">logout</a></span></td>
+                            % if username:
+                            <td style="text-align:right;padding-right:4px;"><span class="pagetop"><a href="user?id=${username}">${username}</a>&nbsp;(xxx)&nbsp;|&nbsp;<a href="${request.route_url('logout')}">logout</a></span></td>
+                            % else:
+                            <td style="text-align:right;padding-right:4px;"><span class="pagetop"><a href="${request.route_url('login')}">login</a></span></td>
+                            % endif
                         </tr>
                     </table>
                 </td>
