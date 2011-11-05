@@ -19,17 +19,30 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 @view_config(route_name='root', renderer='hn.mako')
 def root(request):
-    #items = []
-    items = [{'url': "http://www.yahoo.fr",
-        #'url': request.route_url('frame', 
-        #    url=quote("http://www.yahoo.fr", safe="")),
-        'domain': "yahoo.com",
-        'title': "Yahoo",
-        'points': 666,
-        'author': "Oohay",
-        'age': "18 years",
-        'num_comments': 69}]
-    return {'items': items}
+    items = [
+        {
+            'url': "http://www.yahoo.fr",
+            'domain': "yahoo.fr",
+            'title': "Yahoo",
+            'points': 666,
+            'author': "Oohay",
+            'age': "18 years",
+            'num_comments': 69
+        },
+        {
+            'url': "http://www.techcrunch.com",
+            'domain': "techcrunch.com",
+            'title': "Techcrunch",
+            'points': 456,
+            'author': "bob",
+            'age': "5 months",
+            'num_comments': 42
+        }
+    ]
+    return {
+        'items': items,
+        'username': 'toto'
+    }
 
 @view_config(route_name='frame', renderer='frame.mako')
 def frame(request):
