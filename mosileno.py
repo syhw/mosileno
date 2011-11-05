@@ -37,14 +37,14 @@ def frame(request):
 
 @view_config(route_name='timer_start')
 def timer_start(request):
-    t = request.registry.settings['db'].hdparis114.timers.Timer(request.matchdict['user'],
-            request.GET.get('url'))
+    t = request.registry.settings['db'].timers.Timer()
+    t.init(request.matchdict['user'], request.GET.get('url'))
     t.save()
-    return Response(t._id)
+    return Response(str(t._id))
 
 @view_config(route_name='timer_restart')
 def timer_restart(request):
-    t = request.registry.settings['db'].Timer.find({'_id': 
+    t = request.registry.settings['db'].timers.Timer.find({'_id':
             request.matchdict['id']})
     t.start(request.matchdict['time'])
     t.save()
@@ -52,7 +52,7 @@ def timer_restart(request):
 
 @view_config(route_name='timer_stop')
 def timer_stop(request):
-    t = request.registry.settings['db'].Timer.find({'_id': 
+    t = request.registry.settings['db'].timers.Timer.find({'_id':
             request.matchdict['id']})
     t.stop()
     t.save()
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     settings['mako.directories'] = os.path.join(here, 'templates')
     con = Connection('mongodb://hdparis114:f41922d68004e@hackday.mongohq.com:27017/hdparis114')
     con.register([Timer])
-    settings['db'] = con
+    settings['db'] = con.hdparis114
     # session factory
     session_factory = UnencryptedCookieSessionFactoryConfig('secret')
     # configuration setup
