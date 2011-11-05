@@ -3,6 +3,7 @@ import logging
 from urllib import quote, unquote
 import httplib2
 import simplejson as json
+from urlparse import urlparse
 
 from pyramid.config import Configurator
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
@@ -18,6 +19,7 @@ logging.basicConfig()
 log = logging.getLogger(__file__)
 
 here = os.path.dirname(os.path.abspath(__file__))
+#domainre = re.compile(r"http://[^.]*\.([^.]*\.[^/]*)/.*")
 
 @view_config(route_name='root', renderer='hn.mako')
 def root(request):
@@ -29,6 +31,9 @@ def root(request):
         link += '/' + request.GET.get('nextId')
     resp, content = h.request(link, headers=headers)
     items.extend(json.loads(content)['items'])
+    for item in items:
+        tmp = str(urlparse(item['url']).hostname)
+        item['domain'] = tmp[4:] if tmp.startswith('www.') else tmp
     return {'items': items,
             'username': 'toto'}
 
