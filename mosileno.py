@@ -25,10 +25,10 @@ def root(request):
         'url': request.route_url('frame', 
             url=quote("http://www.yahoo.fr", safe="")),
         'domain': "yahoo.com",
-        'title': "Google",
+        'title': "Yahoo",
         'points': 666,
-        'author': "Page and Brin",
-        'age': "13 years",
+        'author': "Oohay",
+        'age': "18 years",
         'num_comments': 69}]
     return {'items': items}
 
@@ -44,6 +44,9 @@ if __name__ == '__main__':
     config = Configurator(settings=settings, session_factory=session_factory)
     config.add_route('root', '/')
     config.add_route('frame', '/frame/{url}')
+#    config.add_route('timer_start', '/timerstart/{time}')
+#    config.add_route('timer_restart', '/timerrestart/{id}/{time}')
+#    config.add_route('timer_stop', '/timerstop/{id}')
     config.scan()
     # serve app
     app = config.make_wsgi_app()
