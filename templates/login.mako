@@ -6,6 +6,10 @@ Login
 
 <h1>Login</h1>
 
+% if message:
+<p>${message}</p>
+% endif
+
 <form action="${url}" method="post">
     <input type="hidden" name="came_from" value="${came_from}"/>
     <input type="text" name="login" value="${login}"/><br/>

@@ -2,7 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
 from pyramid.security import forget
 
-from security import USERS
+from security import get_user
 
 
 def login(request):
@@ -20,7 +20,8 @@ def login(request):
     if 'form.submitted' in request.params:
         login = request.params['login']
         password = request.params['password']
-        if USERS.get(login) == password:
+        user = get_user(request, login)
+        if user and (user.password == password):
             headers = remember(request, login)
             return HTTPFound(location = came_from,
                              headers = headers)

@@ -30,6 +30,11 @@ def populate(dbconn):
             user.save()
 
 
+def get_user(request, username):
+    dbconn = request.registry.settings['db']
+    return dbconn.users.User.find_one({'username': username})
+
+
 def groupfinder(request, username):
     if request.user is not None:
         return [u'users']

@@ -18,7 +18,7 @@ from pyramid.view import view_config
 
 from mongokit import Connection
 
-from security import User, populate, groupfinder
+from security import User, populate, get_user, groupfinder
 from timer import Timer
 
 from paste.httpserver import serve
@@ -36,7 +36,7 @@ class RequestWithUserAttribute(Request):
          dbconn = self.registry.settings['db']
          userid = unauthenticated_userid(self)
          if userid is not None:
-             return dbconn.users.User.findOne({'username':userid})
+             return get_user(self, userid)
 
 @view_config(route_name='root', renderer='hn.mako')
 def root(request):
