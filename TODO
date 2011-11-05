@@ -1,0 +1,3 @@
+ * Remove the launch of the jvm for each call to tike (get either server mode 
+or pipe/stdin mode working with -T)
+

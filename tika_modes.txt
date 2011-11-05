@@ -1,0 +1,4 @@
+java -jar ~/Downloads/tika-app-0.10.jar -j -d -T URLHERE
+java -jar ~/Downloads/tika-app-0.10.jar -j -d -s 10010
+
+http://tika.apache.org/0.10/gettingstarted.html
