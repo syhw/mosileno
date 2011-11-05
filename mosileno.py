@@ -1,6 +1,8 @@
 import os
 import logging
 from urllib import quote, unquote
+import httplib2
+import simplejson as json
 
 from pyramid.config import Configurator
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
@@ -19,16 +21,14 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 @view_config(route_name='root', renderer='hn.mako')
 def root(request):
-    #items = []
-    items = [{'url': "http://www.yahoo.fr",
-        #'url': request.route_url('frame', 
-        #    url=quote("http://www.yahoo.fr", safe="")),
-        'domain': "yahoo.com",
-        'title': "Yahoo",
-        'points': 666,
-        'author': "Oohay",
-        'age': "18 years",
-        'num_comments': 69}]
+    h = httplib2.Http(".cache")
+    items = []
+    headers={'cache-control': 'max-age=180'}
+    link="http://api.ihackernews.com/page"
+    if (request.GET.get('nextId') is not None):
+        link += '/' + request.GET.get('nextId')
+    resp, content = h.request(link, headers=headers)
+    items.extend(json.loads(content)['items'])
     return {'items': items}
 
 @view_config(route_name='frame', renderer='frame.mako')
