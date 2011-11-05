@@ -1,8 +1,21 @@
 from time import time
+from mongokit import Document
 
-class Timer(object):
-    def __init__(self, start_time=None):
+class Timer(Document):
+    #__collection__ = 'timers'
+    #__database__ = 'hdparis114'
+    structure = {
+            'url': unicode,
+            'user': int,
+            'elapsed': int,
+            'start_time': int
+            }
+
+    def __init__(self, url, user, start_time=None):
+        Document.__init__(self)
         self.elapsed = 0
+        self.url = url
+        self.user = user
         self.start(start_time)
 
     def start(self, start_time=None):
