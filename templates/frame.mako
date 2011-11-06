@@ -33,6 +33,7 @@ $(document).bind(onbeforeunload, timer_stop);
         </style> 
 </head>
 <body>
-        <iframe id="frame" name="frame" src="${url}" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto" onLoad="timer_stop();">Your browser doesn't support iFrames... <a href="${url}">Here it is</a></iframe> 
+    <script>window.history.pushState("Hacker Noise", "Hacker Noise", "/${url}");</script>
+    <iframe id="frame" name="frame" src="${url}" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto" onLoad="timer_stop();">Your browser doesn't support iFrames... <a href="${url}">Here it is</a></iframe> 
 </body>
 </html>
