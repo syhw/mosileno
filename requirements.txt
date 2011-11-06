@@ -1,2 +1,4 @@
 pyramid
 mongokit
+httplib2
+simplejson

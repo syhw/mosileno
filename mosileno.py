@@ -6,17 +6,20 @@ import simplejson as json
 from urlparse import urlparse
 from subprocess import Popen
 
+
 from pyramid.config import Configurator
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.decorator import reify
+from pyramid.request import Request
+from pyramid.response import Response
 from pyramid.security import unauthenticated_userid
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
-from pyramid.response import Response
 from pyramid.view import view_config
 
 from mongokit import Connection
 
-from security import groupfinder
+from security import User, populate, get_user, groupfinder
 from timer import Timer
 
 from paste.httpserver import serve
@@ -26,6 +29,15 @@ log = logging.getLogger(__file__)
 
 here = os.path.dirname(os.path.abspath(__file__))
 #domainre = re.compile(r"http://[^.]*\.([^.]*\.[^/]*)/.*")
+
+class RequestWithUserAttribute(Request):
+
+     @reify
+     def user(self):
+         dbconn = self.registry.settings['db']
+         userid = unauthenticated_userid(self)
+         if userid is not None:
+             return get_user(self, userid)
 
 @view_config(route_name='root', renderer='hn.mako')
 def root(request):
@@ -83,7 +95,7 @@ if __name__ == '__main__':
     settings['includes'] = ["pyramid_debugtoolbar"]
     settings['mako.directories'] = os.path.join(here, 'templates')
     con = Connection('mongodb://hdparis114:f41922d68004e@hackday.mongohq.com:27017/hdparis114')
-    con.register([Timer])
+    con.register([Timer, User])
     settings['db'] = con.hdparis114
 
     # session factory
@@ -100,6 +112,8 @@ if __name__ == '__main__':
                           session_factory=session_factory,
                           authentication_policy=authentication_policy,
                           authorization_policy=authorization_policy)
+
+    config.set_request_factory(RequestWithUserAttribute)
 
     # routes and views
     config.add_static_view('static', 'static/')
@@ -118,6 +132,9 @@ if __name__ == '__main__':
     config.add_route('logout', '/logout')
     config.add_view('auth.logout', route_name='logout')
     config.scan()
+
+    # Init user data
+    populate(settings['db'])
 
     # serve app
     app = config.make_wsgi_app()
