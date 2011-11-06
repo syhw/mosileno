@@ -1,4 +1,8 @@
+The software behind http://hackernoi.se
+
 Explored python solutions for readabilizing:
  * decruft (readability fork)
  * unfluff (stat. test)
  * templatemaker (learns template from multiple pages, quite good)
+Look at Boilerpipe
+
