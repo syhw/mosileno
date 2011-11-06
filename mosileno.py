@@ -4,6 +4,7 @@ from urllib import quote, unquote
 import httplib2
 import simplejson as json
 from urlparse import urlparse
+from subprocess import Popen
 
 from pyramid.config import Configurator
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -39,6 +40,9 @@ def root(request):
     for item in items:
         tmp = str(urlparse(item['url']).hostname)
         item['domain'] = tmp[4:] if tmp.startswith('www.') else tmp
+        if not os.path.exists('raw_data/' + item['id']):
+            Popen(['java','-jar','tika-app-0.10.jar','-j','-d','-T',
+                '> raw_data/'+item['id']])
     return {'items': items,
             'username': unauthenticated_userid(request)}
 
