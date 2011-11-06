@@ -8,15 +8,12 @@ var count_loads = 0;
 var timer_id = null; 
 function timer_start() 
 { 
-console.log('start');/////////////////
     $.get('timer_start/test_user?url=${url | u}', function(data)
             { 
-console.log('startCB');/////////////////
             timer_id = data;
             return false;
             }
          );
-console.log('end'); /////////////////
 };
 timer_start();
 function timer_stop() 
