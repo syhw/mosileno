@@ -94,9 +94,9 @@ if __name__ == '__main__':
     settings['debug_routematch'] = True
     settings['includes'] = ["pyramid_debugtoolbar"]
     settings['mako.directories'] = os.path.join(here, 'templates')
-    con = Connection('mongodb://hdparis114:f41922d68004e@hackday.mongohq.com:27017/hdparis114')
+    con = Connection('mongodb://mosileno:h4ck3rn0is3r@localhost/hackernoise')
     con.register([Timer, User])
-    settings['db'] = con.hdparis114
+    settings['db'] = con.hackernoise
 
     # session factory
     session_factory = UnencryptedCookieSessionFactoryConfig('secret')

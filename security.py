@@ -4,7 +4,7 @@ from mongokit import Document
 class User(Document):
 
     __collection__ = 'users'
-    __database__ = 'hdparis114'
+    __database__ = 'hackernoise'
 
     structure = {
         'username': unicode,
