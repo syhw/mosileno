@@ -40,7 +40,8 @@ function vote(node) {
                     <table border=0 cellpadding=0 cellspacing=0 width="100%" style="padding:2px">
                         <tr>
                             <td style="width:18px;padding-right:4px"><a href="http://ycombinator.com"><img src="http://ycombinator.com/images/y18.gif" width=18 height=18 style="border:1px #ffffff solid;"></img></a></td>
-                            <td style="line-height:12pt; height:10px;"><span class="pagetop"><b><a href="news">Hacker Noise</a></b><img src="http://ycombinator.com/images/s.gif" height=1 width=10><a href="newest">new</a> | <a href="threads?id=snippyhollow">threads</a> | <a href="newcomments">comments</a> | <a href="ask">ask</a> | <a href="jobs">jobs</a> | <a href="submit">submit</a></span></td>
+                            <td style="line-height:12pt; height:10px;"><span class="pagetop"><b><a href="news">Hacker <strike>Noise</strike></a></b><img src="http://ycombinator.com/images/s.gif" height=1 width=10><a href="newest">new</a> | <a href="threads?id=snippyhollow">threads</a> | <a href="newcomments">comments</a> | <a href="ask">ask</a> | <a href="jobs">jobs</a> | <a href="submit">submit</a></span></td>
+
                             % if username:
                             <td style="text-align:right;padding-right:4px;"><span class="pagetop"><a href="user?id=${username}">${username}</a>&nbsp;(xxx)&nbsp;|&nbsp;<a href="${request.route_url('logout')}">logout</a></span></td>
                             % else:
