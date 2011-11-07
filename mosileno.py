@@ -52,9 +52,26 @@ def root(request):
     for item in items:
         tmp = str(urlparse(item['url']).hostname)
         item['domain'] = tmp[4:] if tmp.startswith('www.') else tmp
-        if not os.path.exists('raw_data/' + item['id']):
+        if not os.path.exists('raw_data/' + str(item['id'])):
+            fileoutput = open('raw_data/' + str(item['id']), 'w')
             Popen(['java','-jar','tika-app-0.10.jar','-j','-d','-T',
-                '> raw_data/'+item['id']])
+                item['url']], stdout=fileoutput) ### seems not async (waited)
+            print "Tika is analyzing", item['url']
+        ### Attention people, here is a hack day paris demo hack
+        if 'machine learning' in item['title'].lower() or \
+            'python' in item['title'].lower() or \
+            'khan' in item['title'].lower() or \
+            'lisp' in item['title'].lower():
+            item['titlebig'] = 1
+        elif 'facebook' in item['title'].lower() or \
+            'node' in item['title'].lower() or \
+            'ruby' in item['title'].lower() or \
+            'java' in item['title'].lower():
+            item['titlebig'] = -1
+        else:
+            item['titlebig'] = 0
+        ### /end hack
+
     return {'items': items,
             'username': unauthenticated_userid(request)}
 
